@@ -24,7 +24,7 @@ func Ping(c *gin.Context) {
 
 func UserCreate(c *gin.Context) {
 
-	var json  Models.Admins
+	var json  Models.Admin
 	err := c.BindJSON(&json)
 
 	if err != nil {
@@ -47,14 +47,18 @@ func UserCreate(c *gin.Context) {
 }
 
 func UserDestroy(c *gin.Context)  {
-	var json  Models.Admins
-	err := c.BindJSON(&json)
+	var json  Models.Admin
+	cid , _ := strconv.Atoi(c.Param("id"))
+	err := json.Destroy(cid)
+
 	if err != nil {
-		fmt.Printf("mysql connect error %v", err)
+		fmt.Printf("database error %v", err)
+		c.JSON(200, gin.H{
+			"status": false,
+			"message":"删除失败",
+		})
 		return
 	}
-
-	json.Destroy()
 
 	c.JSON(200, gin.H{
 		"status": true,
@@ -63,30 +67,30 @@ func UserDestroy(c *gin.Context)  {
 }
 
 func UserUpdate(c *gin.Context) {
-	var json  Models.Admins
+	var json  Models.Admin
+	cid , _ := strconv.Atoi(c.Param("id"))
 	err := c.BindJSON(&json)
 
 	if err != nil {
 		fmt.Printf("mysql connect error %v", err)
 	}
 
-	id, err := json.Update(3)
+	res := json.Update(cid)
 
-	if err != nil {
-		fmt.Printf("database error %v", err)
-		fmt.Printf("database error %v", id)
+	if res != nil {
+		fmt.Printf("database error %v", res)
 		return
 	}
 
 	c.JSON(200, gin.H{
 		"status": true,
-		"id":id,
+		"data":cid,
 		"message":"更新成功",
 	})
 }
 
 func UserFindOne(c *gin.Context)  {
-	var json  Models.Admins
+	var json  Models.Admin
 	id , _ := strconv.Atoi(c.Param("id"))
 
 	result, err := json.FindOne(id)
@@ -107,7 +111,7 @@ func UserFindOne(c *gin.Context)  {
 }
 
 func UserFindAll(c *gin.Context)  {
-	var json  Models.Admins
+	var json  Models.Admin
 	err := c.BindJSON(&json)
 
 	if err != nil {

@@ -16,9 +16,9 @@ func InitRouter() *gin.Engine {
 	// 简单的路由组: v1
 	v1 := r.Group("/api")
 	{
-		v1.POST("/user/create", Admin.UserCreate)
-		v1.POST("/user/delete", Admin.UserDestroy)
-		v1.POST("/user/update", Admin.UserUpdate)
+		v1.POST("/users", Admin.UserCreate)
+		v1.DELETE("/users/:id", Admin.UserDestroy)
+		v1.PUT("/users/:id", Admin.UserUpdate)
 		v1.GET("/users/:id", Admin.UserFindOne)
 		v1.GET("/users", Admin.UserFindAll)
 	}
