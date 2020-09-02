@@ -6,5 +6,6 @@ import (
 
 func main(){
 	r := router.InitRouter()
-	r.Run() // 监听并在 0.0.0.0:8080 上启动服务
+	port := "9090"
+	r.Run(":" +  port) // 监听并在 0.0.0.0:8080 上启动服务
 }
